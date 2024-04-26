@@ -24,50 +24,38 @@ Technologies and tools used in this project:
 - **MySQL Connector/J** (${mysql.connector.version}): JDBC driver for interacting with MySQL database.
 
 These tools have been used for testing purposes and interacting with the MySQL database in the project.
-
 # Employees Schema
-This README file contains various SQL queries for a sample `employees` schema. The queries can be adapted to your database schema and needs.
 
-[MySQL Employee Structure](https://dev.mysql.com/doc/employee/en/sakila-structure.html)
-## Employees Table
-| Column Name | Description      |
-|-------------|------------------|
-| emp_no      | Employee number  |
-| first_name  | First name       |
-| last_name   | Last name        |
-| birth_date  | Birth date       |
-| gender      | Gender           |
-| hire_date   | Hire date        |
+This README file contains various SQL queries for a sample employees schema. The queries can be adapted to your database schema and needs.
 
-## Departments Table
-| Column Name | Description        |
-|-------------|--------------------|
-| dept_no     | Department number  |
-| dept_name   | Department name    |
+## MySQL Employee Structure
 
-## Dept_Manager Table
-| Column Name | Description                      |
-|-------------|----------------------------------|
-| emp_no      | Employee number                  |
-| dept_no     | Department number                |
-| from_date   | Start date of management         |
-| to_date     | End date of management           |
+### Employees Table                    | ### Departments Table
+| Column Name | Description           |   | Column Name | Description       |
+|-------------|-----------------------|   |-------------|-------------------|
+| emp_no      | Employee number       |   | dept_no     | Department number |
+| first_name  | First name            |   | dept_name   | Department name   |
+| last_name   | Last name             |   |             |                   |
+| birth_date  | Birth date            |   |             |                   |
+| gender      | Gender                |   |             |                   |
+| hire_date   | Hire date             |   |             |                   |
 
-## Titles Table
-| Column Name | Description                       |
-|-------------|-----------------------------------|
-| emp_no      | Employee number                   |
-| title       | Job title                         |
-| from_date   | Start date of job title           |
-| to_date     | End date of job title             |
+### Dept_Manager Table               | ### Titles Table
+| Column Name | Description           |   | Column Name | Description           |
+|-------------|-----------------------|   |-------------|-----------------------|
+| emp_no      | Employee number       |   | emp_no      | Employee number       |
+| dept_no     | Department number     |   | title       | Job title             |
+| from_date   | Start date of management | | from_date   | Start date of job title |
+| to_date     | End date of management   | | to_date     | End date of job title   |
 
-## Salaries Table
-| Column Name | Description                       |
-|-------------|-----------------------------------|
-| emp_no      | Employee number                   |
-| salary      | Salary                            |
-| from_date   | Start date of salary              |
-| to_date     | End date of salary                |
+### Salaries Table
+| Column Name | Description           |
+|-------------|-----------------------|
+| emp_no      | Employee number       |
+| salary      | Salary                |
+| from_date   | Start date of salary  |
+| to_date     | End date of salary    |
+
 
 ![employees-schema.png](src/main/resources/img/employees-schema.png)
 
