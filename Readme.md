@@ -26,36 +26,6 @@ Technologies and tools used in this project:
 
 These tools have been used for testing purposes and interacting with the MySQL database in the project.
 
-# Employees Schema
 
-This README file contains various SQL queries for a sample employees schema. The queries can be adapted to your database schema and needs.
-
-## MySQL Employee Structure
-
-### Employees Table                   |   ### Departments Table
-| Column Name | Description           |   | Column Name | Description       |
-|-------------|-----------------------|   |-------------|-------------------|
-| emp_no      | Employee number       |   | dept_no     | Department number |
-| first_name  | First name            |   | dept_name   | Department name   |
-| last_name   | Last name             |   |             |                   |
-| birth_date  | Birth date            |   |             |                   |
-| gender      | Gender                |   |             |                   |
-| hire_date   | Hire date             |   |             |                   |
-
-### Dept_Manager Table                |     ### Titles Table
-| Column Name | Description           |   | Column Name | Description           |
-|-------------|-----------------------|   |-------------|-----------------------|
-| emp_no      | Employee number       |   | emp_no      | Employee number       |
-| dept_no     | Department number     |   | title       | Job title             |
-| from_date   | Start date of management | | from_date   | Start date of job title |
-| to_date     | End date of management   | | to_date     | End date of job title   |
-
-### Salaries Table
-| Column Name | Description           |
-|-------------|-----------------------|
-| emp_no      | Employee number       |
-| salary      | Salary                |
-| from_date   | Start date of salary  |
-| to_date     | End date of salary    |
 
 ![employees-schema.png](src/main/resources/img/employees-schema.png)
