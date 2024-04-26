@@ -32,7 +32,7 @@ This README file contains various SQL queries for a sample employees schema. The
 
 ## MySQL Employee Structure
 
-### Employees Table                    | ### Departments Table
+### Employees Table                   |   ### Departments Table
 | Column Name | Description           |   | Column Name | Description       |
 |-------------|-----------------------|   |-------------|-------------------|
 | emp_no      | Employee number       |   | dept_no     | Department number |
@@ -42,7 +42,7 @@ This README file contains various SQL queries for a sample employees schema. The
 | gender      | Gender                |   |             |                   |
 | hire_date   | Hire date             |   |             |                   |
 
-### Dept_Manager Table               | ### Titles Table
+### Dept_Manager Table                |     ### Titles Table
 | Column Name | Description           |   | Column Name | Description           |
 |-------------|-----------------------|   |-------------|-----------------------|
 | emp_no      | Employee number       |   | emp_no      | Employee number       |
