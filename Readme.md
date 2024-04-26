@@ -1,4 +1,5 @@
 # JDBC Framework 
+
 This project provides a framework for executing queries on MySQL database using JDBC (Java Database Connectivity) in Java. With this framework, you can connect to the database, send queries, and retrieve results.
 
 # SQL Summary
@@ -25,8 +26,6 @@ Technologies and tools used in this project:
 
 These tools have been used for testing purposes and interacting with the MySQL database in the project.
 
-# Employees Schema
-This README file contains various SQL queries for a sample `employees` schema. The queries can be adapted to your database schema and needs.
 # Employees Schema
 
 This README file contains various SQL queries for a sample employees schema. The queries can be adapted to your database schema and needs.
@@ -59,7 +58,4 @@ This README file contains various SQL queries for a sample employees schema. The
 | from_date   | Start date of salary  |
 | to_date     | End date of salary    |
 
-[MySQL Employee Structure](https://dev.mysql.com/doc/employee/en/sakila-structure.html)
-
 ![employees-schema.png](src/main/resources/img/employees-schema.png)
-
