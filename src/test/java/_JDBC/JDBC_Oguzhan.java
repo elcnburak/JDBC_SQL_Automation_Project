@@ -90,6 +90,7 @@ public class JDBC_Oguzhan {
 
         System.out.println("**************************************************************");
         con.close();
+
     }
 }
 
