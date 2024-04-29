@@ -5,6 +5,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.testng.Assert.assertFalse;
+
 public class JDBC_Elcin extends JDBCParent {
 
     @Test
@@ -19,6 +21,7 @@ public class JDBC_Elcin extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -47,6 +50,7 @@ public class JDBC_Elcin extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -76,6 +80,7 @@ public class JDBC_Elcin extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -112,6 +117,7 @@ public class JDBC_Elcin extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -144,6 +150,7 @@ public class JDBC_Elcin extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -174,6 +181,7 @@ public class JDBC_Elcin extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -194,6 +202,7 @@ public class JDBC_Elcin extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -224,7 +233,6 @@ public class JDBC_Elcin extends JDBCParent {
             tablo.add(satir);
             satirSayisi++; // Her döngüde sayaçı arttırıyoruz
         }
-
         return tablo;
     }
 }
