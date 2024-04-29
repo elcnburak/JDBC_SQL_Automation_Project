@@ -2,94 +2,230 @@ package _JDBC;
 
 import org.testng.annotations.Test;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class JDBC_Elcin {
+public class JDBC_Elcin extends JDBCParent {
 
     @Test
-    public void Test() throws SQLException {
+    public void Test1() { //-- This query retrieves employees who have salaries between 50000 and 100000.
 
-        // URL contains "jdbc(main protocol):mysql(sub protocol for mySql)://localhost:3306(sub name for mysql (host:port))/employees(database)"
-        // and this method return type is Connection Object ...
-        String hostURL = "jdbc:mysql://db-technostudy.ckr1jisflxpv.us-east-1.rds.amazonaws.com";
-        String dbSchema = hostURL + "/employees";
-        String username = "root";
-        String password = "'\"-LhCB'.%k[4S]z";
+        String sorgu = "SELECT *\n" +
+                "FROM employees\n" +
+                "INNER JOIN salaries ON employees.emp_no = salaries.emp_no\n" +
+                "WHERE salaries.salary BETWEEN 50000 AND 100000\n" +
+                "LIMIT 20;"; // Sorguya LIMIT ekleyerek sadece ilk 20 satırı alıyoruz
 
-        // For establishing con with database we call static method called getConnection(...) present in DriverManager Class.
-        // This method contains three arguments of string type. i.e., url, username and password
-        Connection con = DriverManager.getConnection(dbSchema, username, password);
-
-        // For creating st object we need to call a method called createStatement() which is present in Connection Interface.
-        // And this method returns Statement object, it is no argument method.
-        Statement st = con.createStatement();
-
-        // For executing select queries(for fetching records) we call a method called executeQuery(String qry) by taking string as parameter.
-        // This method returns ResultSet object.
-        ResultSet rs = st.executeQuery("select * from employees");
-        // Once executeQuery() executes the query and stores the records in to ResultSet object.
-
-        // Now we need to get the records from ResultSet object.
-        // To access the resultset object it uses a method called next() which presents in ResultSet Interface.
-        // By default, Resultset reference 'rs' points to before first row. it moves rs to next row and returns true.
-        // When it returns true we retrieve the data in first row. next() returns false when rs points to after the last row.
-        // this next() will repeats the execution using while loop till it returns false.
-        int i =0;
-        while(rs.next() && i!=20) {
-            i++;
-            int empID= rs.getInt("emp_no");
-            String birthDate= rs.getString("birth_date");
-            String name=rs.getString(3);
-            String surname= rs.getString(4);
-            String gender=rs.getString("gender");
-            Date hireDate=rs.getDate("hire_date");
-            System.out.println(empID+"\t"+birthDate+"\t"+name+"\t"+surname+"\t"+gender+"\t"+hireDate);
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
         }
-        // Once execution of all statements were completed we need to close all the connections
-        // by using method called close() present in Connection interface
-        con.close();
+    }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////
+    @Test
+    public void Test2() {//-- List the names, last names, hire dates of all employees hired between January 01, 1985 and December 31, 1989, sorted by hire date.
 
-        System.out.println("**************************************************************");
-        con = DriverManager.getConnection(dbSchema, username, password);
-        st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rs = st.executeQuery("select * from departments");
-        String dept_name;
+        String sorgu = "SELECT " +
+                "departments.dept_name AS department, " +
+                "AVG(salaries.salary) AS average_salary " +
+                "FROM " +
+                "departments " +
+                "INNER JOIN dept_emp ON departments.dept_no = dept_emp.dept_no " +
+                "INNER JOIN salaries ON dept_emp.emp_no = salaries.emp_no " +
+                "GROUP BY " +
+                "departments.dept_name " +
+                "LIMIT 20;";
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+    }
 
-        rs.absolute(2);
-        dept_name = rs.getString("dept_name");
+    @Test
+    public void Test3() {//-- List the names, last names, hire dates, and salaries of all employees in the Sales department who were hired between January 01, 1985 and December 31, 1989, sorted by salary in descending order.
 
-        System.out.println("    |   Department Name = " + dept_name);
-        System.out.println("**************************************************************");
+        String sorgu = "SELECT \n" +
+                "    first_name,\n" +
+                "    last_name,\n" +
+                "    hire_date\n" +
+                "FROM \n" +
+                "    employees\n" +
+                "WHERE \n" +
+                "    hire_date BETWEEN '1985-01-01' AND '1989-12-31'\n" +
+                "ORDER BY \n" +
+                "    hire_date\n" +
+                "LIMIT 20;";
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+    }
+    @Test
+    public void Test4() {//-- List the names, last names, hire dates, and salaries of all employees in the Sales department who were hired between January 01, 1985 and December 31, 1989, sorted by salary in descending order.
 
-        rs.relative(4);
-        dept_name = rs.getString("dept_name");
-        System.out.println("    |   name = " + dept_name);
-        System.out.println("**************************************************************");
+        String sorgu = "SELECT \n" +
+                "    employees.first_name, \n" +
+                "    employees.last_name, \n" +
+                "    employees.hire_date, \n" +
+                "    salaries.salary \n" +
+                "FROM \n" +
+                "    employees \n" +
+                "INNER JOIN \n" +
+                "    dept_emp ON employees.emp_no = dept_emp.emp_no \n" +
+                "INNER JOIN \n" +
+                "    salaries ON employees.emp_no = salaries.emp_no \n" +
+                "INNER JOIN \n" +
+                "    departments ON dept_emp.dept_no = departments.dept_no \n" +
+                "WHERE \n" +
+                "    employees.hire_date BETWEEN '1985-01-01' AND '1989-12-31' \n" +
+                "    AND departments.dept_name = 'Sales' \n" +
+                "ORDER BY \n" +
+                "    salaries.salary DESC \n" +
+                "LIMIT 20;\n";
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+    }
 
-        rs.relative(-5);
-        dept_name = rs.getString("dept_name");
-        System.out.println("    |   name = " + dept_name);
+    @Test
+    public void Test5() {//-- Find the highest paid employee in department D004
+        String sorgu = "SELECT \n" +
+                "    employees.first_name,\n" +
+                "    employees.last_name,\n" +
+                "    salaries.salary\n" +
+                "FROM \n" +
+                "    employees\n" +
+                "JOIN \n" +
+                "    dept_emp ON employees.emp_no = dept_emp.emp_no\n" +
+                "JOIN \n" +
+                "    salaries ON employees.emp_no = salaries.emp_no\n" +
+                "WHERE \n" +
+                "    dept_emp.dept_no = 'D004'\n" +
+                "ORDER BY \n" +
+                "    salaries.salary DESC\n" +
+                "LIMIT 1;";
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+    }
 
-        System.out.println("**************************************************************");
+    @Test
+    public void Test6() {//-- Find the entire position history for employee with emp. no '10102'
+        String sorgu = "SELECT \n" +
+                "    employees.first_name,\n" +
+                "    employees.last_name,\n" +
+                "    titles.title,\n" +
+                "    titles.from_date,\n" +
+                "    titles.to_date\n" +
+                "FROM \n" +
+                "    employees\n" +
+                "INNER JOIN \n" +
+                "    titles ON employees.emp_no = titles.emp_no\n" +
+                "WHERE \n" +
+                "    employees.emp_no = '10102'\n" +
+                "    AND titles.from_date > employees.hire_date;";
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+    }
+    @Test
+    public void Test8() {//-- List employees hired in April 1992
 
-        rs.last();
-        dept_name = rs.getString("dept_name");
-        System.out.println("last dept_name = " + dept_name);
+        String sorgu = "SELECT *\n" +
+                "FROM employees\n" +
+                "WHERE hire_date BETWEEN '1992-04-01' AND '1992-04-30';";
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+    }
+    public List<List<String>> getListData(String sorgu) throws SQLException {
+        List<List<String>> tablo = new ArrayList<>();
 
-        rs.first();
-        dept_name = rs.getString("dept_name");
-        System.out.println("first dept_name = " + dept_name);
+        ResultSet rs = sorguEkrani.executeQuery(sorgu);
+        ResultSetMetaData rsmd = rs.getMetaData();
 
-        System.out.println("**************************************************************");
+        ArrayList<String> kolonSatiri = new ArrayList<>();
+        for (int i = 1; i <= rsmd.getColumnCount(); i++)
+            kolonSatiri.add(rsmd.getColumnName(i));
+        tablo.add(kolonSatiri);
 
-        rs.last();
-        int rowCount = rs.getRow();
-        System.out.println("Total Row = " + rowCount);
+        int satirSayisi = 0; // İlk 10 satırı saymak için bir sayaç tanımlıyoruz
+        while (rs.next() && satirSayisi < 20) { // İlk 20 satırı almak için döngüyü ayarlıyoruz
+            ArrayList<String> satir = new ArrayList<>();
+            for (int i = 1; i <= rsmd.getColumnCount(); i++)
+                satir.add(rs.getString(i));
+            tablo.add(satir);
+            satirSayisi++; // Her döngüde sayaçı arttırıyoruz
+        }
 
-        System.out.println("**************************************************************");
-        con.close();
+        return tablo;
     }
 }
-
 
