@@ -11,10 +11,9 @@ public class JDBCParent {
 
     public static void DBConnectionOpen()
     {
-        String url = "jdbc:mysql://db-technostudy.ckr1jisflxpv.us-east-1.rds.amazonaws.com/employess";
+        String url = "jdbc:mysql://db-technostudy.ckr1jisflxpv.us-east-1.rds.amazonaws.com/employees";
         String username = "root";
         String password = "'\"-LhCB'.%k[4S]z";
-
 
         try {
             baglanti = DriverManager.getConnection(url, username, password);
