@@ -1,97 +1,289 @@
 package _JDBC;
 
+
+import Utilities.DBUtility;
 import org.testng.annotations.Test;
-
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class JDBC_Oguzhan {
+import static org.testng.Assert.assertFalse;
+
+public class JDBC_Oguzhan extends JDBCParent {
+
 
     @Test
-    public void Test() throws SQLException {
+    public void Test1() {
 
-        // URL contains "jdbc(main protocol):mysql(sub protocol for mySql)://localhost:3306(sub name for mysql (host:port))/employees(database)"
-        // and this method return type is Connection Object ...
-        String hostURL = "jdbc:mysql://db-technostudy.ckr1jisflxpv.us-east-1.rds.amazonaws.com";
-        String dbSchema = hostURL + "/employees";
-        String username = "root";
-        String password = "'\"-LhCB'.%k[4S]z";
+//        -- 5. Calculate the average salary of all employees with gender "F"
+//                -- "Kadın" cinsiyetindeki tüm çalışanların ortalama maaşını hesapla.
 
-        // For establishing con with database we call static method called getConnection(...) present in DriverManager Class.
-        // This method contains three arguments of string type. i.e., url, username and password
-        Connection con = DriverManager.getConnection(dbSchema, username, password);
+        String sorgu = "select avg(salary) \n" +
+                " as KadınCalisanMaasOrtalama ,gender from salaries\n" +
+                "left join employees ON employees.emp_no=salaries.emp_no where gender='F' ;";
 
-        // For creating st object we need to call a method called createStatement() which is present in Connection Interface.
-        // And this method returns Statement object, it is no argument method.
-        Statement st = con.createStatement();
+        try {
+            DBConnectionOpen();
 
-        // For executing select queries(for fetching records) we call a method called executeQuery(String qry) by taking string as parameter.
-        // This method returns ResultSet object.
-        ResultSet rs = st.executeQuery("select * from employees");
-        // Once executeQuery() executes the query and stores the records in to ResultSet object.
+            List<List<String>> tablo = getListData(sorgu);
+            assertFalse(tablo.isEmpty(), "Sorgunun İçi Boştur");
+            for (List<String> satir : tablo) {
+                for (String sutun : satir)
+                    System.out.println(sutun + "\t");
+                System.out.println();
+            }
 
-        // Now we need to get the records from ResultSet object.
-        // To access the resultset object it uses a method called next() which presents in ResultSet Interface.
-        // By default, Resultset reference 'rs' points to before first row. it moves rs to next row and returns true.
-        // When it returns true we retrieve the data in first row. next() returns false when rs points to after the last row.
-        // this next() will repeats the execution using while loop till it returns false.
-        int i =0;
-        while(rs.next() && i!=20) {
-            i++;
-            int empID= rs.getInt("emp_no");
-            String birthDate= rs.getString("birth_date");
-            String name=rs.getString(3);
-            String surname= rs.getString(4);
-            String gender=rs.getString("gender");
-            Date hireDate=rs.getDate("hire_date");
-            System.out.println(empID+"\t"+birthDate+"\t"+name+"\t"+surname+"\t"+gender+"\t"+hireDate);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
         }
-        // Once execution of all statements were completed we need to close all the connections
-        // by using method called close() present in Connection interface
-        con.close();
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////
-
-        System.out.println("**************************************************************");
-        con = DriverManager.getConnection(dbSchema, username, password);
-        st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        rs = st.executeQuery("select * from departments");
-        String dept_name;
-
-        rs.absolute(2);
-        dept_name = rs.getString("dept_name");
-
-        System.out.println("    |   Department Name = " + dept_name);
-        System.out.println("**************************************************************");
-
-        rs.relative(4);
-        dept_name = rs.getString("dept_name");
-        System.out.println("    |   name = " + dept_name);
-        System.out.println("**************************************************************");
-
-        rs.relative(-5);
-        dept_name = rs.getString("dept_name");
-        System.out.println("    |   name = " + dept_name);
-
-        System.out.println("**************************************************************");
-
-        rs.last();
-        dept_name = rs.getString("dept_name");
-        System.out.println("last dept_name = " + dept_name);
-
-        rs.first();
-        dept_name = rs.getString("dept_name");
-        System.out.println("first dept_name = " + dept_name);
-
-        System.out.println("**************************************************************");
-
-        rs.last();
-        int rowCount = rs.getRow();
-        System.out.println("Total Row = " + rowCount);
-
-        System.out.println("**************************************************************");
-        con.close();
 
     }
+
+    @Test
+    public void test2(){
+
+//        -- 6. List all employees in the "Sales" department with a salary greater than 70,000.
+//                -- Maaşı 70.000'den yüksek olan "Satış" departmanındaki tüm çalışanları listele.
+
+
+        String sorgu = "select dept_name, salary, dept_emp.emp_no from employees\n" +
+                "left join salaries On salaries.emp_no=employees.emp_no\n" +
+                "left join dept_emp On dept_emp.emp_no=salaries.emp_no\n" +
+                "left join departments On dept_emp.dept_no=departments.dept_no\n" +
+                " where salary > 70000 and dept_name= 'Sales' order by salary LIMIT 20;";
+
+
+        try {
+            DBConnectionOpen();
+
+            List<List<String>> tablo = getListData(sorgu);
+            assertFalse(tablo.isEmpty(), "Sorgunun İçi Boştur");
+            for (List<String> satir : tablo) {
+                for (String sutun : satir)
+                    System.out.println(sutun + "\t");
+                System.out.println();
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
+
+
+    }
+
+    @Test
+    public void test3(){
+
+//       17  -- Her departmandaki en yüksek ortalama maaşa sahip çalışanları belirle. Departman adını,
+//        -- çalışanın adını, soyadını ve ortalama maaşı listele. Sonuçları departmanlarına göre azalan şekilde
+//                -- sırala, sadece kendi departmanlarında en yüksek ortalama maaşa sahip olanları göster.
+
+
+        String sorgu = "select dept_name, max(salary), first_name, last_name, employees.emp_no from employees\n" +
+                "left join salaries On salaries.emp_no=employees.emp_no\n" +
+                "left join dept_emp On dept_emp.emp_no=salaries.emp_no\n" +
+                "left join departments On dept_emp.dept_no=departments.dept_no\n" +
+                "group by dept_name order by salary desc;";
+
+
+        try {
+            DBConnectionOpen();
+
+            List<List<String>> tablo = getListData(sorgu);
+            assertFalse(tablo.isEmpty(), "Sorgunun İçi Boştur");
+            for (List<String> satir : tablo) {
+                for (String sutun : satir)
+                    System.out.println(sutun + "\t");
+                System.out.println();
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
+
+
+    }
+
+    @Test
+    public void test4(){
+
+//        -- 18. List the names, last names, and hire dates in alphabetical order of all employees hired before
+//        -- January 01, 1990.
+//                -- 1990-01-01 tarihinden önce işe alınan tüm çalışanların adlarını, soyadlarını ve işe alınma
+//                -- tarihlerini alfabetik sırayla listele.
+
+
+        String sorgu = "select first_name, last_name, hire_date from employees\n" +
+                "where hire_date < '1990-01-01' order by first_name;";
+
+
+        try {
+            DBConnectionOpen();
+
+            List<List<String>> tablo = getListData(sorgu);
+            assertFalse(tablo.isEmpty(), "Sorgunun İçi Boştur");
+            for (List<String> satir : tablo) {
+                for (String sutun : satir)
+                    System.out.println(sutun + "\t");
+                System.out.println();
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
+
+
+    }
+
+    @Test
+    public void test5(){
+
+//        -- 29. List all employees working in the "Sales" department with the title "Manager"
+//                -- "Satış" bölümünde "Yönetici" unvanıyla çalışan tüm çalışanları listele
+
+
+        String sorgu = "select\n " +
+                "dept_name,\n" +
+                " first_name,\n" +
+                " last_name,\n" +
+                " dept_manager.emp_no\n" +
+                " as Manager from employees\n" +
+                "left join dept_manager On dept_manager.emp_no=employees.emp_no\n" +
+                "left join departments On departments.dept_no=dept_manager.dept_no\n" +
+                " where dept_name = 'Sales' order by dept_manager.emp_no;";
+
+
+        try {
+            DBConnectionOpen();
+
+            List<List<String>> tablo = getListData(sorgu);
+            assertFalse(tablo.isEmpty(), "Sorgunun İçi Boştur");
+            for (List<String> satir : tablo) {
+                for (String sutun : satir)
+                    System.out.println(sutun + "\t");
+                System.out.println();
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
+
+
+    }
+
+    @Test
+    public void test6(){
+
+//        -- 30. Find the department where employee with '10102' has worked the longest
+//        -- '10102' numaralı çalışanın en uzun süre çalıştığı departmanı bul
+
+
+        String sorgu = "select\n" +
+                " employees.emp_no,\n" +
+                " dept_name,\n" +
+                " from_date,\n" +
+                " to_date from employees\n" +
+                "left join dept_emp On dept_emp.emp_no=employees.emp_no\n" +
+                "left join departments On departments.dept_no=dept_emp.dept_no\n" +
+                " where employees.emp_no = '10102' and max(from_date - to_date);";
+
+
+        try {
+            DBConnectionOpen();
+
+            List<List<String>> tablo = getListData(sorgu);
+            assertFalse(tablo.isEmpty(), "Sorgunun İçi Boştur");
+            for (List<String> satir : tablo) {
+                for (String sutun : satir)
+                    System.out.println(sutun + "\t");
+                System.out.println();
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
+
+
+    }
+
+    @Test
+    public void test7(){
+
+//        -- 39. Sort employees by their birth dates
+//        -- Çalışanları doğum tarihlerine göre sıralama
+
+
+        String sorgu = "select first_name, last_name, birth_date from employees order by birth_date;";
+
+
+        try {
+            DBConnectionOpen();
+
+            List<List<String>> tablo = getListData(sorgu);
+            assertFalse(tablo.isEmpty(), "Sorgunun İçi Boştur");
+            for (List<String> satir : tablo) {
+                for (String sutun : satir)
+                    System.out.println(sutun + "\t");
+                System.out.println();
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
+
+
+    }
+
+
+
+
+
+
+
+    public List<List<String>> getListData(String sorgu) throws SQLException {
+        List<List<String>> tablo = new ArrayList<>();
+
+        ResultSet rs = sorguEkrani.executeQuery(sorgu);
+        ResultSetMetaData rsmd = rs.getMetaData();
+
+        ArrayList<String> kolonSatiri = new ArrayList<>();
+        for (int i = 1; i <= rsmd.getColumnCount(); i++)
+            kolonSatiri.add(rsmd.getColumnName(i));
+        tablo.add(kolonSatiri);
+
+        int satirSayisi = 0; // İlk 10 satırı saymak için bir sayaç tanımlıyoruz
+        while (rs.next() && satirSayisi < 20) { // İlk 20 satırı almak için döngüyü ayarlıyoruz
+            ArrayList<String> satir = new ArrayList<>();
+            for (int i = 1; i <= rsmd.getColumnCount(); i++)
+                satir.add(rs.getString(i));
+            tablo.add(satir);
+            satirSayisi++; // Her döngüde sayaçı arttırıyoruz
+        }
+        return tablo;
+    }
+
+
 }
+
 
 
