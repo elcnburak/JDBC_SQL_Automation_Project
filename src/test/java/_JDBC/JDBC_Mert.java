@@ -163,7 +163,34 @@ public class JDBC_Mert extends JDBCParent {
         } finally {
             DBConnectionClose();
         }
+    }
 
+    @Test
+    public void Test6(){
+        /*
+        -- SORGU 28 : List all employees hired after '1994-02-24' and earning more than 50,000.
+        -- '1994-02-24' tarihinden sonra işe alınan ve 50.000'den fazla kazanan tüm çalışanları listele.
+         */
+
+        String sorgu ="select hire_date , salary from employees \n" +
+                "left join salaries ON salaries.emp_no=employees.emp_no\n" +
+                "where hire_date>'1994-02-24' and salary>'50.000' \n" +
+                "order by salary desc;";
+
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "The query is not empty.");
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
     }
 
     public List<List<String>> getListData(String sorgu) throws SQLException {
