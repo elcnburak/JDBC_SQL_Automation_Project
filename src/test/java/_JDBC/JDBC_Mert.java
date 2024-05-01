@@ -207,6 +207,21 @@ public class JDBC_Mert extends JDBCParent {
                 "left join employees ON employees.emp_no=dept_manager.emp_no \n" +
                 "where departments.dept_no='d005';";
 
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "The query is not empty.");
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
 
     }
 
