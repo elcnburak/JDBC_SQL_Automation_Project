@@ -77,10 +77,30 @@ public class JDBC_Mert extends JDBCParent {
     public void Test3() {
 
         /*
--- SORGU 15 :
--- Find the employee with the highest salary in the Research Department
--- Araştırma Departmanındaki En Yüksek Maaşlı Çalışanı Bul.
-         */
+        -- SORGU 15 :
+        -- Find the employee with the highest salary in the Research Department
+        -- Araştırma Departmanındaki En Yüksek Maaşlı Çalışanı Bul.
+       */
+
+        String sorgu = "select dept_emp.emp_no,max(salary),\n" +
+                "departments.dept_name from departments \n" +
+                "left join dept_emp ON departments.dept_no=dept_emp.dept_no\n" +
+                "left join salaries ON salaries.emp_no=dept_emp.emp_no where dept_name='Research';";
+
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "The query is not empty.");
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
     }
 
     public List<List<String>> getListData(String sorgu) throws SQLException {
