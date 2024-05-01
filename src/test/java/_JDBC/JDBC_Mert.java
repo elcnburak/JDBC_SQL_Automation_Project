@@ -43,13 +43,13 @@ public class JDBC_Mert extends JDBCParent {
     }
 
     @Test
-    public void Test2(){
+    public void Test2() {
 
         /*
         -- SORGU 4 :
 
         -- Calculate the average salary of all employees with gender "M".
-                -- "Erkek" cinsiyetindeki tüm çalışanların ortalama maaşını hesapla.
+        -- "Erkek" cinsiyetindeki tüm çalışanların ortalama maaşını hesapla.
         */
 
 
@@ -71,6 +71,16 @@ public class JDBC_Mert extends JDBCParent {
         } finally {
             DBConnectionClose();
         }
+    }
+
+    @Test
+    public void Test3() {
+
+        /*
+-- SORGU 15 :
+-- Find the employee with the highest salary in the Research Department
+-- Araştırma Departmanındaki En Yüksek Maaşlı Çalışanı Bul.
+         */
     }
 
     public List<List<String>> getListData(String sorgu) throws SQLException {
