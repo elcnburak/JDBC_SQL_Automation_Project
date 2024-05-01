@@ -137,6 +137,35 @@ public class JDBC_Mert extends JDBCParent {
         }
     }
 
+    @Test
+    public void Test5() {
+
+        /*
+        -- SORGU 27 : List all employees and managers in the D005 department.
+        -- D005 bölümündeki tüm çalışanları ve yöneticileri listele.
+         */
+
+        String sorgu ="select departments.dept_no , first_name, last_name from departments\n" +
+                "left join dept_emp ON dept_emp.dept_no=departments.dept_no\n" +
+                "left join employees ON employees.emp_no=dept_emp.emp_no where departments.dept_no='d005';";
+
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "The query is not empty.");
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+
+    }
+
     public List<List<String>> getListData(String sorgu) throws SQLException {
         List<List<String>> tablo = new ArrayList<>();
 
