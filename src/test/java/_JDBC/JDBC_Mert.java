@@ -28,7 +28,7 @@ public class JDBC_Mert extends JDBCParent {
         try {
             DBConnectionOpen();
             List<List<String>> donenTablo = getListData(sorgu);
-            assertFalse(donenTablo.isEmpty(), "Sorgu sonucu boş olmamalıdır.");
+            assertFalse(donenTablo.isEmpty(), "The query is not empty.");
             for (List<String> satir : donenTablo) {
                 for (String kolon : satir)
                     System.out.print(kolon + "\t");
@@ -45,6 +45,32 @@ public class JDBC_Mert extends JDBCParent {
     @Test
     public void Test2(){
 
+        /*
+        -- SORGU 4 :
+
+        -- Calculate the average salary of all employees with gender "M".
+                -- "Erkek" cinsiyetindeki tüm çalışanların ortalama maaşını hesapla.
+        */
+
+
+        String sorgu = "select avg(salary) as ErkekCalisanMaasOrtalama ,gender from salaries\n" +
+                "left join employees ON employees.emp_no=salaries.emp_no where gender='M' ;";
+
+
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "The query is not empty.");
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
     }
 
     public List<List<String>> getListData(String sorgu) throws SQLException {
