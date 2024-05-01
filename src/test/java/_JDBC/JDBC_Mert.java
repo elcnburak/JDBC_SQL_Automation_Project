@@ -103,6 +103,40 @@ public class JDBC_Mert extends JDBCParent {
         }
     }
 
+    @Test
+    public void Test4() {
+        /*
+        -- SORGU 16 :
+    -- For each department, identify the employee with the highest single salary ever recorded.
+    -- List the department name, employee's first name, last name, and the peak salary amount.
+    -- Order the results by the peak salary in descending order.
+    -- Her departman için, kaydedilmiş en yüksek tek maaşı belirle.
+    -- Departman adını, çalışanın adını,soyadını ve en yüksek maaş tutarını listele.
+    -- Sonuçları en yüksek maaşa göre azalan şekilde sırala.
+         */
+
+        String sorgu = "select dept_name , first_name , last_name , max(salary) from departments\n" +
+                "left join dept_emp ON dept_emp.dept_no=departments.dept_no\n" +
+                "left join employees ON employees.emp_no=dept_emp.emp_no\n" +
+                "left join salaries ON salaries.emp_no=employees.emp_no group by departments.dept_name\n" +
+                "order by MAX(salary) desc;";
+
+        try {
+            DBConnectionOpen();
+            List<List<String>> donenTablo = getListData(sorgu);
+            assertFalse(donenTablo.isEmpty(), "The query is not empty.");
+            for (List<String> satir : donenTablo) {
+                for (String kolon : satir)
+                    System.out.print(kolon + "\t");
+                System.out.println();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            DBConnectionClose();
+        }
+    }
+
     public List<List<String>> getListData(String sorgu) throws SQLException {
         List<List<String>> tablo = new ArrayList<>();
 
