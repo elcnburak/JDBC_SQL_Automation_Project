@@ -193,6 +193,23 @@ public class JDBC_Mert extends JDBCParent {
         }
     }
 
+    @Test
+    public void Test7(){
+
+        /*
+        -- SORGU 38 : Find the first and last names of managers in department 'D005'.
+        -- 'D005' bölümündeki yöneticilerin adını ve soyadını bulma.
+         */
+
+        String sorgu ="select departments.dept_no, dept_manager.emp_no, first_name, last_name\n" +
+                "from departments\n" +
+                "left join dept_manager ON departments.dept_no=dept_manager.dept_no\n" +
+                "left join employees ON employees.emp_no=dept_manager.emp_no \n" +
+                "where departments.dept_no='d005';";
+
+
+    }
+
     public List<List<String>> getListData(String sorgu) throws SQLException {
         List<List<String>> tablo = new ArrayList<>();
 
