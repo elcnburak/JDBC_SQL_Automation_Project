@@ -225,7 +225,7 @@ public class JDBC_Mert extends JDBCParent {
 
     }
 
-    public List<List<String>> getListData(String sorgu) throws SQLException {
+    public static List<List<String>> getListData(String sorgu) throws SQLException {
         List<List<String>> tablo = new ArrayList<>();
 
         ResultSet rs = sorguEkrani.executeQuery(sorgu);
