@@ -1,7 +1,5 @@
 package _JDBC;
 
-
-import Utilities.DBUtility;
 import org.testng.annotations.Test;
 import java.sql.*;
 import java.util.ArrayList;
